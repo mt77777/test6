@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>注射の場所</title>
+
+<!--body onload="showDialog()"-->
+
+<body onload="startSpeechRecognition_2()">
+<!-----------------------------------------------------
+<p>音声認識もできるテキストエディター<br>
+<span style="color: red;"><b>自己責任でご使用ください。<br>
+このページを使用して何か問題が発生しても<br>
+このページの作者及び管理人は一切責任を負いません。</b></span><br>
+秘密にすべきことは入力しないでください。<br>
+Chromeやedgeの標準的な音声認識機能を利用しているので<br>
+音声認識は外部サーバーで実行されます。</p>
+
+
+  <button id="custom-button" onclick="openFileInput()">読込</button>
+<button id='saveas'  onclick="bangumihyou_hozon()"   >保存</button>
+　<input type="file" id="file-input" style="display: none;" onchange="handleFileSelect(event)">
+
+  <button onclick="undo()">←戻る</button>
+  <button onclick="redo()">進む→</button>
+  <button style="background-color:yellow;" onclick="zenbun_sakujyo()">(ﾉToT)ﾉ ┫:･'.::･リセット</button>
+
+　<button onclick="searchGoogle()">
+    <span>全文を</span>
+<b>
+    <span style="color: blue;">G</span>
+    <span style="color: red;">o</span>
+    <span style="color: orange;">o</span>
+    <span style="color: blue;">g</span>
+    <span style="color: green;">l</span>
+    <span style="color: red;">e</span>
+</b>a
+    <span>で検索</span>
+  </button>
+  <button onclick="searchBing()">
+    <span>全文を</span>
+<b>    <span style="color: mediumblue;">B</span>
+    <span style="color: dodgerblue;">i</span>
+    <span style="color: lightskyblue;">n</span>
+    <span style="color: limegreen;">g</span>
+</b>    <span>で検索</span>
+  </button>
+
+　<button onclick="textBox_copy()">全文をコピー</button>
+
+<br>
+
+---------------------------------------------------------->
+
+  <button style="background-color:pink;" onclick="startSpeechRecognition_2()">音声認識開始</button>
+  <button style="background-color:mediumorchid;" onclick="stopSpeechRecognition();startSpeechRecognition_2();">催促</button>
+  <!--button onclick="startSpeechRecognition_1()">音声認識開始(単回)</button-->
+  <button style="background-color:lightblue;" onclick="stopSpeechRecognition()">音声認識停止</button>
+<br>
+  <textarea id="output_0" rows="1" cols="20" style="font-size:15pt;" ></textarea><br>
+
+<!-----------------------------------------------------
+　<button onclick="AllremoveBlanks()">全文の空欄削除</button>
+  <button onclick="zentai_zenkaku2hankaku()">全文の全角英数を半角に</button>
+  <button onclick="zentai_hankaku2zenkaku()">全文の半角英数を全角に</button>
+<br>
+
+
+
+<div style="  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  height:306px;">
+
+<div style="  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  height:306px;">
+
+  <button onclick="writeToTextArea('、')">、</button>
+  <button onclick="writeToTextArea('。')">。</button>
+  <button onclick="writeToTextArea('０')">０</button>
+  <button onclick="writeToTextArea('１')">１</button>
+  <button onclick="writeToTextArea('２')">２</button>
+  <button onclick="writeToTextArea('３')">３</button>
+  <button onclick="writeToTextArea('４')">４</button>
+  <button onclick="writeToTextArea('５')">５</button>
+  <button onclick="writeToTextArea('６')">６</button>
+  <button onclick="writeToTextArea('７')">７</button>
+  <button onclick="writeToTextArea('８')">８</button>
+  <button onclick="writeToTextArea('９')">９</button>
+
+
+  <button onclick="writeToTextArea('（')">（　</button>
+  <button onclick="writeToTextArea('）')">　）</button>
+  <button onclick="writeToTextArea('「')">「　</button>
+  <button onclick="writeToTextArea('」')">　」</button>
+  <button onclick="writeToTextArea('ー')">ー　</button>
+  <button onclick="writeToTextArea('＠')">＠　</button>
+
+
+  <button onclick="writeToTextArea('？')">？　</button>
+  <button onclick="writeToTextArea('／')">／　</button>
+  <button onclick="writeToTextArea('￥')">￥　</button>
+
+  <button onclick="writeToTextArea('＿')">＿　</button>
+
+  <button onclick="writeToTextArea('\n')">改行</button>
+  <button onclick="writeToTextArea('　')">空欄</button>
+
+------------------------------------------------------------>
+
+  <textarea id="output" rows="15" cols="20" style="font-size:15pt;" ></textarea><br>
+<!-------------------------------------------------------------------
+</div>
+</div>
+
+
+<button style="background-color:yellow;"  onclick="mae_sakujyo()">前削除</button>
+<button style="background-color:yellow;"  onclick="writeToTextArea('')">選択部を削除</button>
+<button style="background-color:yellow;"  onclick="ato_sakujyo()">後削除</button>
+
+　<button onclick="removeBlanks()">選択部の空欄削除</button>
+<button onclick="select_zenkaku2hankaku()">選択部の全角英数を半角に</button>
+  <button onclick="select_hankaku2zenkaku()">選択部の半角英数を全角に</button>
+
+
+<br>
+<button onclick="selectAllText()">全文選択</button>
+<button onclick="yomiage_kakunin()">選択部の読み上げ開始</button>
+<button onclick="yomiage_stop()">選択部の読み上げ停止</button>
+
+　<button onclick="select_searchGoogle()">
+    <span>選択部を</span>
+<b>    <span style="color: blue;"  >G</span>
+    <span style="color: red;"   >o</span>
+    <span style="color: orange;">o</span>
+    <span style="color: blue;"  >g</span>
+    <span style="color: green;" >l</span>
+    <span style="color: red;"   >e</span>
+</b>    <span>で検索</span>
+  </button>
+  <button onclick="select_searchBing()">
+    <span>選択部を</span>
+<b>
+    <span style="color: mediumblue;">B</span>
+    <span style="color: dodgerblue;">i</span>
+    <span style="color: lightskyblue;">n</span>
+    <span style="color: limegreen;">g</span>
+</b>
+    <span>で検索</span>
+  </button>
+-------------------------------------------------------------------->
+<br>
+
+<!-- ***************************************************************************************************************************** --> 
+<!-- ***************************************************************************************************************************** -->
+ <script>
+    function showDialog() {
+      //開始時に表示する 警告文===================================================================
+      var result = confirm("本ページは音声認識もできるテキストエディターです。"+"\n\n"+ "本ページの利用によりいかなる不都合が生じても、本ページの作者および管理者は一切の責任を負いません。以上ご了承されたらOKボタンを押しご利用ださい。ご了承されない場合ばキャンセルボタンを押し、本ページを利用せず終了してください。");
+      if (result) {
+        // OKがクリックされた場合
+        // 何もしない（ページはそのまま表示される）
+      } else {
+        // キャンセルがクリックされた場合
+        window.close(); // ページを閉じる
+      }
+    //開始時に表示する 警告文=ここまで==================================================================
+
+    }
+
+
+
+   // 音声認識オブジェクト
+    let recognition;
+    var kurikaesi_flg = 0;//1なら音声認識を繰り返す
+
+    var textBox_0 = document.getElementById('output_0');
+    var textBox = document.getElementById('output');
+
+    textBox_0.inputMode = "kana";//textBoxの初期入力モードは、この設定をしても、IME が平仮名だと ひらがな入力になりIME が半角英数だと半角英数字入力になる
+    textBox.inputMode = "kana";//textBoxの初期入力モードは、この設定をしても、IME が平仮名だと ひらがな入力になりIME が半角英数だと半角英数字入力になる
+
+    var startPos = 0;//次に音声認識の結果が書かれるときに上書きされる範囲の開始位置
+    var endPos = 0;//次に音声認識の結果が書かれるときに上書きされる範囲の終了位置
+
+
+    //=====ここから undo,redo用=================================================================
+    var undoStack = [];
+    var redoStack = [];
+    //=====ここまで undo,redo用=================================================================
+
+    //=====ここから undo,redo用=================================================================
+      undoStack.push(textBox.value);
+      redoStack = [];
+    //=====ここまで undo,redo用=================================================================
+
+
+
+
+    // ブラウザが音声認識をサポートしているかチェック
+ //  if ('webkitSpeechRecognition' in window) {
+      // 音声認識オブジェクトの作成
+      recognition = new webkitSpeechRecognition();
+
+      // 認識言語を設定（日本語に設定）
+      recognition.lang = 'ja-JP';
+            recognition.interimResults = false;//true か false
+            recognition.continuous = false;
+
+     //======================================================================
+      // 音声認識開始時のイベントハンドラ
+      //recognition.onstart = function(event) {
+        //textBox.style.backgroundColor = "#FF9966"; // 背景色をオレンジ色にする
+      //};
+
+     //======================================================================
+      // 音声認識終了時のイベントハンドラ
+      recognition.onend = function(event) {
+       if (kurikaesi_flg == 2){
+         recognition.start();
+       }else if (kurikaesi_flg == 1){
+         kurikaesi_flg = 0;
+         textBox_0.style.backgroundColor = "white"; // 背景色を白色にする
+         textBox.style.backgroundColor = "white"; // 背景色を白色にする
+       }
+     };
+
+     //======================================================================
+      // 認識結果の取得時に実行されるイベントハンドラ
+      recognition.onresult = function(event) {
+        // 認識結果を取得
+        const transcript = event.results[0][0].transcript;
+
+        // 取得した認識結果をテキストボックスに表示
+
+        textBox_0.value = transcript;
+
+        //if(getLastThreeCharacters(transcript)=="を検索"){
+        if(getLastThreeCharacters(textBox_0.value)=="を検索"){
+            //text_select_searchGoogle(removeLastThreeCharacters(transcript));
+writeToTextArea(removeLastThreeCharacters(textBox_0.value));
+writeToTextArea('\n');
+        }
+
+
+        //writeToTextArea(transcript);
+      };
+     //======================================================================
+
+//   }
+
+     //======================================================================
+    // 音声認識を開始する関数（連続）
+    function startSpeechRecognition_2() {
+        textBox.focus()
+
+　　　　kurikaesi_flg = 2;
+        //textBox.style.backgroundColor = "#FF9966"; // 背景色をオレンジ色にする
+        //textBox.style.backgroundColor = "peachpuff"; // 背景色をオレンジ色にする
+        //textBox.style.backgroundColor = "mistyrose"; // 背景色をmistyroseにする
+        textBox_0.style.backgroundColor = "LightPink"; // 背景色をLightPinkにする
+        textBox.style.backgroundColor = "LightPink"; // 背景色をLightPinkにする
+
+      //if (recognition) {
+        recognition.start();
+      //}
+
+        textBox.focus()
+
+    }
+
+    //======================================================================
+    // 音声認識を開始する関数（単回）
+    function startSpeechRecognition_1() {
+        textBox.focus()
+
+　　　　kurikaesi_flg = 1;
+        textBox_0.style.backgroundColor = "#FF9966"; // 背景色をオレンジ色にする
+        textBox.style.backgroundColor = "#FF9966"; // 背景色をオレンジ色にする
+
+      //if (recognition) {
+        recognition.start();
+      //}
+
+
+        textBox.focus()
+    }
+
+
+     //======================================================================
+    // 音声認識を停止する関数
+    function stopSpeechRecognition() {
+      //if (recognition) {
+        kurikaesi_flg = 0;
+        textBox_0.style.backgroundColor = "white"; // 背景色を白色にする
+        textBox.style.backgroundColor = "white"; // 背景色を白色にする
+
+        recognition.stop();
+        textBox.focus();
+      //}
+    }
+
+    //======================================================================
+    //読み上げ停止
+    function yomiage_stop() {
+        speechSynthesis.cancel();
+        textBox.focus();
+    }
+
+    //======================================================================
+    // 読み上げ確認
+    function yomiage_kakunin(){
+        stopSpeechRecognition();
+
+        speechSynthesis.cancel();//Chromeで読み上げが打ち切られた時に、読み上げを再会するために必要な行。
+
+        var text0 =textBox.value.slice(textBox.selectionStart, textBox.selectionEnd);
+
+        //if (text0.length>100){
+        //  window.alert("読み上げは100文字まで");
+        //}else{
+            var speech = new SpeechSynthesisUtterance( text0);
+            speechSynthesis.speak(speech);
+        //}
+
+        textBox.focus()
+    }
+
+    //======================================================================
+    function writeToTextArea(text) {//textBoxの文章の選択位置をtextで置き換える関数
+       //選択されている位置を取得する
+       startPos = textBox.selectionStart;
+       endPos = textBox.selectionEnd;
+
+	//選択位置をtextで置き換える
+        textBox.value = textBox.value.slice(0, textBox.selectionStart) + text + textBox.value.slice(textBox.selectionEnd);
+
+        //選択位置を新たに決めなおす
+         endPos =  startPos  + text.length;
+         startPos =endPos;
+
+	textBox.setSelectionRange(startPos, endPos);
+        textBox.focus()
+
+
+
+
+      //=====ここから undo,redo用=================================================================
+      undoStack.push(textBox.value);
+      redoStack = [];
+      //=====ここまで undo,redo用=================================================================
+
+
+
+
+    }
+
+     //======================================================================
+    function textBox_copy(){ // textBoxの文字列全体をコピーする
+      navigator.clipboard.writeText(textBox.value);
+    }
+
+
+
+     //======================================================================
+    function zenbun_sakujyo(){ //全文削除
+      textBox.value='';
+    }
+
+    //======================================================================
+      function searchGoogle() {//全文をGoogleで検索
+          WebSearch("https://www.google.com/search?q=",textBox.value);
+      }
+
+    //======================================================================
+      function searchBing() {//全文をBingで検索
+          WebSearch('https://www.bing.com/search?q=',textBox.value);
+      }
+
+    //======================================================================
+      function select_searchGoogle() {//選択部をGoogleで検索
+var selectedText =  sentaku_bubun();
+          WebSearch("https://www.google.com/search?q=",selectedText);
+      }
+
+    //======================================================================
+      function text_select_searchGoogle(str) {//文字列をGoogleで検索
+var selectedText =  str;
+          WebSearch("https://www.google.com/search?q=",selectedText);
+      }
+
+    //======================================================================
+      function select_searchBing() {//選択部をBingで検索
+var selectedText =  sentaku_bubun();
+          WebSearch('https://www.bing.com/search?q=',selectedText);
+      }
+
+
+    //======================================================================
+       function WebSearch(s_url,str) {
+         window.open( s_url +  encodeURIComponent(str), "_blank");
+         textBox.focus()
+       }
+
+
+    //======================================================================
+    function selectAllText(){
+      //var textarea = document.getElementById("myTextarea");
+      textBox.select();
+    }
+
+    //======================================================================
+     function removeBlanks() {//テキストボックスの文の選択された部分から空白を取り除く
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            // 操作はここに書く
+            hontai_Text_b=kuuhaku_sakujyo( hontai_Text_a);
+
+            // セレクト部だけ操作を実施したテキストで置き換える
+            textBox.value = mae_Text_a + hontai_Text_b + ato_Text_a;
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(start,start+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+
+
+    //======================================================================
+    function kuuhaku_sakujyo(str) {//文字列中の空白を削除
+        var str1 = str.replace(/ /g, ""); // 半角空白を取り除く
+        var str2 =str1.replace(/　/g,""); // 全角空白を取り除く
+        return str2;
+    }
+
+
+
+    //======================================================================
+     function AllremoveBlanks() {//テキストボックスの全文から空白を取り除く
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+
+            var mae_Text_b;//操作後の、最初からセレクト部の直前までのテキスト
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            textBox.value =kuuhaku_sakujyo(textBox.value );  // 操作はここに書く
+            mae_Text_b    =kuuhaku_sakujyo(mae_Text_a);      // 操作はここに書く
+            hontai_Text_b =kuuhaku_sakujyo( hontai_Text_a);  // 操作はここに書く
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(mae_Text_b.length ,mae_Text_b.length+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+
+
+    //======================================================================
+//テキストボックスの中の文の選択された部分を返す関数
+function sentaku_bubun() {
+
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var selectedText = text.substring(start, end);
+
+  return selectedText;
+}
+
+    //======================================================================
+//文字列中の空白の数を返す
+function countSpaces(str) {
+  var count = 0;
+  for (var i = 0; i < str.length; i++) {
+    if (str[i] === ' ') {
+      count++;
+    }
+  }
+  return count;
+}
+
+
+    //=====ここから undo,redo用=================================================================
+    function undo() {
+      if (undoStack.length > 0) {
+        var previousState = undoStack.pop();
+        redoStack.push(textBox.value);
+        textBox.value = previousState;
+      }
+
+        textBox.focus()
+    }
+
+    //===================================
+    function redo() {
+      if (redoStack.length > 0) {
+        var nextState = redoStack.pop();
+        undoStack.push(textBox.value);
+        textBox.value = nextState;
+      }
+        textBox.focus()
+
+    }
+
+    //===================================
+    textBox.addEventListener("input", function() {
+      undoStack.push(textBox.value);
+      redoStack = [];
+    });
+
+
+
+    //=====ここまで undo,redo用=================================================================
+
+   //ここから テキストエリア内でタブ文字を入力============================================================
+   //テキストエリア内でタブ文字を入力できるように、キー入力を監視し、タブキーが押された場合にタブ文字を挿入する
+  textBox.addEventListener('keydown', function(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault(); // デフォルトの動作をキャンセル
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      this.value = this.value.substring(0, start) + '\t' + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = start + 1; // カーソル位置を調整
+    }
+  });
+   //ここまで テキストエリア内でタブ文字を入力　===============================================
+
+
+    //======================================================================
+     function select_zenkaku2hankaku() {//テキストボックスの文の選択された部分//全角英数字を半角英数字に変換
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            hontai_Text_b=zenkaku2hankaku( hontai_Text_a); // 操作はここに書く（この行を書き換える）
+
+            // セレクト部だけ操作を実施したテキストで置き換える
+            textBox.value = mae_Text_a + hontai_Text_b + ato_Text_a;
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(start,start+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+    //======================================================================
+     function zentai_zenkaku2hankaku() {//テキストボックスの文の全体//全角英数字を半角英数字に変換
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+
+            var mae_Text_b;//操作後の、最初からセレクト部の直前までのテキスト
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            textBox.value =zenkaku2hankaku(textBox.value );  // 操作はここに書く（この行を書き換える）
+            mae_Text_b    =zenkaku2hankaku(mae_Text_a);      // 操作はここに書く（この行を書き換える）
+            hontai_Text_b =zenkaku2hankaku(hontai_Text_a );  // 操作はここに書く（この行を書き換える）
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(mae_Text_b.length ,mae_Text_b.length+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+
+
+    //======================================================================
+    function zenkaku2hankaku(str) {//全角英数字を半角英数字に変換
+       var str1= str.replace(/[Ａ-Ｚａ-ｚ０-９！-～]/g, function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0);});
+       var str2=str1.replace(/、/g, ","); 
+       var str3=str2.replace(/。/g, "."); 
+       var str4=str3.replace(/　/g, " "); //スペースの変換
+       var str5=str4.replace(/「/g, "["); 
+       var str6=str5.replace(/」/g, "]"); 
+       var str7=str6.replace(/ー/g, "-");
+       var str8=str7.replace(/￥/g, "\\");
+    return str8;
+
+   }
+
+
+    //======================================================================
+     function select_hankaku2zenkaku() {//テキストボックスの文の選択された部分//半角英数字を全角英数字に変換
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            hontai_Text_b=hankaku2zenkaku( hontai_Text_a); // 操作はここに書く（この行を書き換える）
+
+            // セレクト部だけ操作を実施したテキストで置き換える
+            textBox.value = mae_Text_a + hontai_Text_b + ato_Text_a;
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(start,start+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+    //======================================================================
+     function zentai_hankaku2zenkaku() {//テキストボックスの文の全体//半角英数字を全角英数字に変換
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+
+            var mae_Text_b;//操作後の、最初からセレクト部の直前までのテキスト
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            textBox.value =hankaku2zenkaku(textBox.value );  // 操作はここに書く（この行を書き換える）
+            mae_Text_b    =hankaku2zenkaku(mae_Text_a);      // 操作はここに書く（この行を書き換える）
+            hontai_Text_b =hankaku2zenkaku(hontai_Text_a );  // 操作はここに書く（この行を書き換える）
+
+            //新しくなった文にセレクト部を復活させる
+         //   textBox.setSelectionRange(mae_Text_b.length ,mae_Text_b.length+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+
+
+
+
+    //======================================================================
+    function hankaku2zenkaku(str) {//半角英数字を全角英数字に変換
+       var str1= str.replace(/[A-Za-z0-9!-~]/g, function(s){return String.fromCharCode(s.charCodeAt(0)+0xFEE0);});
+       var str2=str1.replace(/\,/g, "、"); 
+       var str3=str2.replace(/\./g, "。"); 
+       var str4=str3.replace(/\ /g, "　"); //スペースの変換
+       var str5=str4.replace(/\[/g, "「"); 
+       var str6=str5.replace(/\]/g, "」"); 
+       var str7=str6.replace(/\-/g, "ー");
+       var str8=str7.replace(/＼/g, "￥"); 
+    return str8;
+
+}
+
+
+
+
+
+
+//input type="file"のボタンの表記が直接変更することができないので、普通のボタン（id=file-input）を表示し、これを押したときにinput type="file"のボタンがクリックされるようにする関数。input type="file"のボタンは見えなくする。
+
+    function openFileInput() {
+      document.getElementById('file-input').click();
+    }
+
+
+    //======================================================================
+    function handleFileSelect(event) {//ファイル読み込み
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+  // ファイル名を取得する
+  const fileName = file.name;
+  console.log("ファイル名:", fileName);
+
+      reader.onload = function(event) {//このイベントハンドラは、ファイルの読み込みが完了した際に実行される。
+        const contents = event.target.result;
+        textBox.value = contents;
+      };
+
+      reader.readAsText(file);//ファイルをテキストとして読み込む。
+
+    }
+
+
+
+    //======================================================================
+
+	// ファイル書き出し（ここから）      
+	let fileHandle
+
+	async function bangumihyou_hozon()  {
+
+		try {
+			const content =textBox.value;
+
+			fileHandle = await window.showSaveFilePicker();
+			if (fileHandle.kind !== 'file') return
+
+			const writableStream = await fileHandle.createWritable()
+			await writableStream.write(content)
+			await writableStream.close()
+		} catch (e) {
+			console.error(e)
+		}
+	}
+
+	//  ファイル書き出し（ここまで）--------------------------------------------------------------------------------------------------------------------------- 
+
+
+
+//======================================================================
+function mae_sakujyo(){//選択の前1字を削除
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+
+         if(start>0){
+            var mae_Text_a = text.substring(0, start-1);
+            var ato_Text_a = text.substring(start);
+            textBox.value = mae_Text_a + ato_Text_a;
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(start-1,end-1 );
+         }
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+}
+
+//======================================================================
+function ato_sakujyo(){//選択の後1字を削除
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+
+         if(end<text.length){
+            var mae_Text_a = text.substring(0, end);
+            var ato_Text_a = text.substring(end+1);
+            textBox.value = mae_Text_a + ato_Text_a;
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(start,end);
+         }
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+}
+
+
+
+
+
+
+
+     //======================================================================
+     function select_sousa_hinagata() {//テキストボックスの文の選択された部分に操作を行う関数のひな型
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            //hontai_Text_b=function( hontai_Text_a); // 操作はここに書く（この行を書き換える）
+
+            // セレクト部だけ操作を実施したテキストで置き換える
+            textBox.value = mae_Text_a + hontai_Text_b + ato_Text_a;
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(start,start+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+    //======================================================================
+     function zentai_sousa_hinagata() {//テキストボックスの文の全体に操作を行う関数のひな型
+            var start = textBox.selectionStart;
+            var end = textBox.selectionEnd;
+            var text = textBox.value;
+            var mae_Text_a = text.substring(0, start);//最初からセレクト部の直前までのテキストのこと
+            var hontai_Text_a = text.substring(start, end);//セレクト部本体のテキストのこと
+            var ato_Text_a = text.substring(end);//セレクト部の直後から最後までのテキストのこと
+
+            var mae_Text_b;//操作後の、最初からセレクト部の直前までのテキスト
+            var hontai_Text_b ;//操作後のセレクト部本体のテキスト
+
+            //textBox.value =function(textBox.value );  // 操作はここに書く（この行を書き換える）
+            //mae_Text_b    =function(mae_Text_a);      // 操作はここに書く（この行を書き換える）
+            //hontai_Text_b =function( hontai_Text_a);  // 操作はここに書く（この行を書き換える）
+
+            //新しくなった文にセレクト部を復活させる
+            textBox.setSelectionRange(mae_Text_b.length ,mae_Text_b.length+hontai_Text_b.length );
+
+            //フォーカスをテキストエリアに戻す
+            textBox.focus()
+
+     }
+
+    //======================================================================
+
+function getLastThreeCharacters(str) {//文字列の最後から3文字だけを取り出す関数
+  if (typeof str !== 'string') {
+    throw new Error('Input must be a string.');
+  }
+
+  if (str.length <= 3) {
+    return str;
+  }
+
+  return str.slice(-3);
+}
+
+    //======================================================================
+function removeLastThreeCharacters(str) {//文字列の最後から3文字だけを削除する関数
+  if (typeof str !== 'string') {
+    throw new Error('Input must be a string.');
+  }
+
+  if (str.length <= 3) {
+    return '';
+  }
+
+  return str.slice(0, -3);
+}
+    //======================================================================
+/* */
+
+
+
+
+
+
+
+        textBox.focus()    //この行は開始時にテキストエリアの先頭にプロンプトが行くようにつけている
+
+  </script>
+</body>
+</html>
